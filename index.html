@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  .father {
+    width: 500px;
+    height: 500px;
+    background-color: black;
+  }
+
+  .son {
+    width: 400px;
+    height: 400px;
+    background-color: wheat;
+  }
+
+  body {
+    height: 3000px;
+  }
+
+  .div1 {
+    height: 200px;
+    width: 200px;
+    overflow: scroll;
+  }
+</style>
+
+<body>
+  <div class="father">
+    <div class="son">
+你好
+</div>
+  </div>
+    <script>
+      // 事件流 捕获 冒泡(会依次调用 父级的同名事件)
+      //  可以阻止冒泡
+      let flag = false;
+      document.addEventListener('click', function () {
+        console.log('我是爷爷');
+      }, flag);
+      const fa = document.querySelector('.father');
+      const son = document.querySelector('.son');
+      fa.addEventListener('click', function () {
+        console.log('我是爸爸');
+      }, flag)
+      son.addEventListener('click', function (e) {
+        // e.stopImmediatePropagation()
+        console.log('我是儿子');
+        e.stopPropagation();//阻止事件流的同样也是阻止冒泡
+      }, flag)
+      // 事件解绑 onclick 的 直接 btn.onclick=null 即可
+      // son.removeEventListener('click',function)
+      // 匿名函数无法被解绑
+
+      fa.addEventListener('mouseout', function () {
+        console.log('离开父亲');
+
+      })
+      // mouseover mouseout mouseenter mouseleave
+      // 前者会冒泡？不理解 从father进入 son 会触发为什么 就是 推荐使用后面的
+
+      // 事件委托 利用冒泡 来执行事件  减少注册次数 性能++
+      //   e这个参数可以获取事件 target.tagName是标签name
+      //  可以阻止默认的行为
+      const a = document.querySelector('a');
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+      })
+      // 页面加载事件 滚动 页面尺寸事件
+      // js有执行顺序 页面也有加载顺序 注意代码的顺序
+      window.addEventListener('load', function () {
+        // 页面加载完毕才会执行这个回调函数
+      })
+      // 如果js写在head上面可以用
+      // 也可以等待某种资源加完毕再执行
+      // img.addEventListener('load',function(){})
+      // 页面加载事件 有html就可以执行 不需要等待css img的资源
+      // document.addEventListener('DOMContentLoaded')
+      // 页面滚动事件 scroll
+      window.addEventListener('scroll', function (e) {
+        //console.log('我滚了');
+        //console.dir(e);
+      })
+      // scrollTop 被卷去的头部
+      const div1 = document.querySelector('.div1');
+      div1.addEventListener('scroll', function () {
+        console.log(div1.scrollTop);
+
+      })
+
+    </script>
+</body>
+
+</html>
